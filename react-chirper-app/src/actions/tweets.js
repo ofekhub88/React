@@ -14,13 +14,13 @@ function addTweet(tweet) {
 
 export function handleAddTweet(text, replyingTo) {
   return (dispatch, getState) => {
-    const { authedUser } = getState();
-
+    const { authorUser } = getState();
+     console.log("auther"+authorUser)
     dispatch(showLoading());
 
     return saveTweet({
       text,
-      author: authedUser,
+      author: authorUser,
       replyingTo,
     })
       .then((tweet) => dispatch(addTweet(tweet)))

@@ -1,5 +1,7 @@
 import { connect } from "react-redux";
 import { formatTweet, formatDate } from "../utils/helpers";
+import { useNavigate, Link } from "react-router-dom";
+
 import {
   TiArrowBackOutline,
   TiHeartOutline,
@@ -8,19 +10,28 @@ import {
 import { handleToggleTweet } from "../actions/tweets";
 
 const Tweet = (props) => {
-    
+
+  const navigate = useNavigate();
+
     if (props.tweet === null ){
         return (
-        <p> "This tweet Dosn't exits ." </p>
+        <p> "This tweet Dosn't existd ." </p>
         ) ;
     }
-    const { name, avatar, timestamp, text, hasLiked, likes, replies, parent } = props.tweet;
 
-    const toParent = (e, id) => {
-        e.preventDefault();
-    
-        // TODO: Redirect to parent Tweet
-      };
+  const {
+      name,
+      avatar,
+      timestamp,
+      text,
+      hasLiked,
+      likes,
+      replies,
+      id,
+      parent,
+    } = props.tweet;
+
+
 
 
       const handleLike = (e) => {
@@ -37,10 +48,16 @@ const Tweet = (props) => {
         );
       };
       
+      const toParent = (e, id) => {
+        e.preventDefault();
     
+        // TODO: Redirect to parent Tweet
+        navigate(`/tweet/${id}`);
+      };
 
     return(
         <div className="tweet" >
+          <Link to={`/tweet/${id}`} className="tweet">
         <img src={avatar} alt={`Avatar of ${name}`} className="avatar" />
            <div className="tweet-info">
                 <div>
@@ -69,6 +86,7 @@ const Tweet = (props) => {
                  <span>{likes !== 0 && likes}</span>
                </div>
            </div>
+           </Link>
         </div>
     );
 };
