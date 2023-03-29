@@ -4,16 +4,7 @@ import {  Link } from "react-router-dom";
 import { connect } from "react-redux";
 
 const Question = (props) => {
-  /*
-  const navigate = useNavigate();
-
-    if (props.tweet === null ){
-        return (
-        <p> "This tweet Dosn't existd ." </p>
-        ) ;
-    }
-
-*/
+ 
   const {author,
       timestamp,
       optionOne,
@@ -21,6 +12,10 @@ const Question = (props) => {
       id
     } = props.question;
 
+    if (props.user === undefined)
+    {
+      return null
+    }
 
 const user_name = props.user.name
 const user_id = props.user.id
@@ -38,7 +33,7 @@ const user_questions = props.user.question ? props.user.question : null
              
             </div>
             
-            <Link to={"/poll/id="+id} >
+            <Link to={"/question/id="+id} >
             <div class="card-footer bg-transparent border-success">
              {props.voted ? "View" : "Vote for this poll"}
               </div>
@@ -54,23 +49,13 @@ const user_questions = props.user.question ? props.user.question : null
 function mapStateToProps({  users, questions }, { id }) {
 
     const question = questions[id];
- 
+    
     const user = question ? users[question.author]  : null ;
     return {
       question: question,
       user: user
 
     }
-
-    //const parentTweet = tweet ? tweets[tweet.replyingTo] : null;
-  
- /*   return {
-      authedUser,
-      question: question
-        ? formatTweet(tweet, users[tweet.author], authedUser, parentTweet)
-        : null,
-    };
-    */
   }
   
   export default connect(mapStateToProps)(Question);

@@ -1,12 +1,12 @@
 import { connect } from "react-redux";
-import Question from "./Question";
+import Poll from "./Question";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle';
+import Question from "./Question";
 
 
 const Home = (props) => {
  
-
   return (
     <div>
   
@@ -16,7 +16,6 @@ const Home = (props) => {
   <p className="fs-4">
     Pools i voted already for . </p>
   { props.iVotedToIds.map(id =>
- 
         <Question id = {id} voted={true}/>
       )
 }
@@ -26,20 +25,21 @@ const Home = (props) => {
   Pools i didnt vote yet </p>
     { props.NotVotedToIds.map(id =>
     
-        <Question id = {id} voted={false} />)
-     }
+        <Poll id = {id} voted={false} />)
+}
   </div>
 </div>
+     
     </div>
   );
 };
 
 
 
-const mapStateToProps = ({ questions ,authorUser}) => {
- const iVotedToIds = Object.keys(questions).filter(id => authorUser 
+const mapStateToProps = ({ questions ,autherUser}) => {
+ const iVotedToIds = Object.keys(questions).filter(id => autherUser 
   &&   questions[id].optionOne.votes.concat(
-    questions[id].optionTwo.votes).includes(authorUser)
+    questions[id].optionTwo.votes).includes(autherUser)
   );
   const NotVotedToIds = Object.keys(questions).filter(id => iVotedToIds && !iVotedToIds.includes(id));
 

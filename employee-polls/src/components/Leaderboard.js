@@ -1,12 +1,12 @@
 import { connect } from "react-redux";
-import Question from "./Question";
+import Question from "./QuestionPage";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle';
-import { handleSetAuthor } from "../actions/authorUser"
+import { handleSetAuther } from "../actions/autherUser"
 
 const Leaderboard = (props) => {
  
-  props.dispatch(handleSetAuthor("tylermcginnis"))
+  props.dispatch(handleSetAuther("tylermcginnis"))
   return (
     <div>
   

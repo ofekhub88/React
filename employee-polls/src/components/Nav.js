@@ -1,10 +1,10 @@
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-import { handleSetAuthor } from "../actions/authorUser"
+import { handleSetAuther } from "../actions/autherUser"
 
 const Nav = (props) => {
    
-    const handleLogout =(e) => props.dispatch(handleSetAuthor(null));
+    const handleLogout =(e) => props.dispatch(handleSetAuther(null));
     if (props.user === undefined)
     {
       return null
@@ -30,9 +30,9 @@ const Nav = (props) => {
 
 };
 
-const mapStateToProps = ({users,authorUser}) => {
+const mapStateToProps = ({users,autherUser}) => {
   return { 
-      user: users["tylermcginnis"]
+      user: users[autherUser] 
 };
 
 };

@@ -7,7 +7,7 @@ export function setAuthedUser(id) {
   };
 }
 
-export function handleSetAuthor(id) {
+export function handleSetAuther(id) {
   return {
     type: SET_AUTHED_USER,
     id

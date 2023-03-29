@@ -1,16 +1,11 @@
-import { _get_Questions,_saveQuestion } from "../data/_DATA";
+import { _get_Questions,_saveQuestion ,_saveQuestionAnswer} from "../data/_DATA";
 import { showLoading, hideLoading } from "react-redux-loading-bar";
 
 export const RECEIVE_QUESTIONS = "RECEIVE_QUESTIONS";
-export const VOTE_QUESTION = "VOTE_QUESTION";
+export const ANSWER_QUESTION = "ANSWER_QUESTION";
 export const ADD_QUESTION = "ADD_QUESTION";
 
-function addQuestion(question) {
-  return {
-    type: ADD_QUESTION,
-    question,
-  };
-}
+
 
 export function receiveQuestions(questions) {
   return {
@@ -19,31 +14,21 @@ export function receiveQuestions(questions) {
   };
 }
 
-export function voteQuestions({ id,authedUser,vote }) {
+
+
+function addQuestion(question) {
   return {
-    type: VOTE_QUESTION,
-    authedUser,
-    vote,
+    type: ADD_QUESTION,
+    question,
   };
 }
 
-/*
-function toggleQuestion({ id, authedUser, hasLiked }) {
-  return {
-    type: TOGGLE_QUESTION,
-    id,
-    authedUser,
-    hasLiked,
-  };
-}
-*/
+
 export function handleAddQuestion(question) {
   return (dispatch, getState) => {
-    const { authorUser } = getState();
-     console.log("auther"+authorUser)
-     question["auther"] = authorUser;
+    const { autherUser } = getState();
+     question["author"] = autherUser;
     dispatch(showLoading());
-
     return _saveQuestion(
       question,
     )
@@ -53,26 +38,26 @@ export function handleAddQuestion(question) {
 }
 
 
-/*
 
-function toggleQuestion({ id, authedUser, hasLiked }) {
+
+function answerQuestion({ authedUser, qid, answer }) {
   return {
-    type: TOGGLE_QUESTION,
-    id,
+    type: ANSWER_QUESTION,
+    qid,
     authedUser,
-    hasLiked,
+    answer,
   };
 }
 
-export function handleVoteQuestion(info) {
-  return (dispatch) => {
-    dispatch(toggleQuestion(info));
 
-    return saveLikeToggle(info).catch((e) => {
-      console.warn("Error in handleToggleQuestion: ", e);
-      dispatch(toggleQuestion(info));
-      alert("The was an error liking the question. Try again.");
+export function handleAnswerQuestion({ authedUser, qid, answer }) {
+  return (dispatch) => {
+    dispatch(answerQuestion({ authedUser, qid, answer }));
+
+    return _saveQuestionAnswer({ authedUser, qid, answer }).catch((e) => {
+      console.warn("Error in handleAnswerQuestion: ", e);
+      //dispatch(removeAnswerQuestion({ authedUser, qid, answer }));
+      alert("The was an error liking the answer. Try again.");
     });
   };
 }
-*/

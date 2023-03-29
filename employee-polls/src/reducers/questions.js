@@ -1,4 +1,4 @@
-import { RECEIVE_QUESTIONS, VOTE_QUESTION, ADD_QUESTION } from "../actions/questions";
+import { RECEIVE_QUESTIONS, ANSWER_QUESTION, ADD_QUESTION } from "../actions/questions";
 
 export  function questions(state = {}, action) {
   switch (action.type) {
@@ -7,18 +7,36 @@ export  function questions(state = {}, action) {
         ...state,
         ...action.questions,
       };
-    case VOTE_QUESTION:
+
+    case ANSWER_QUESTION:
+      console.log(state[action.qid].optionOne.votes );
       return {
+      
         ...state,
-        [action.id]: {
-          ...state[action.id],
-          likes:
-            action.hasLiked === true
-              ? state[action.id].likes.filter(
-                  (uid) => uid !== action.authedUser
-                )
-              : state[action.id].likes.concat([action.authedUser]),
-        },
+        [action.qid]: {
+          ...state[action.qid],
+            optionOne: { ...state[action.qid].optionOne,
+               votes: action.answer === "optionOne"  ?
+                {...state[action.qid].optionOne.votes.filter(
+                (uid) => uid !== action.authedUser
+               ).concat(action.authedUser)}
+               :
+               {
+               ...state[action.qid].optionOne.votes.filter(
+                (uid) => uid !== action.authedUser)
+               }},
+            optionTwo: { ...state[action.qid].optionTwo,
+                votes: action.answer === "optionTwo" ?
+                 {...state[action.qid].optionTwo.votes.filter(
+                 (uid) => uid !== action.authedUser
+                ).concat(action.authedUser)}
+                :
+                {
+                ...state[action.qid].optionTwo.votes.filter(
+                 (uid) => uid !== action.authedUser)
+                }
+              }
+      }
       };
     case ADD_QUESTION:
       const { question } = action;

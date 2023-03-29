@@ -7,7 +7,7 @@ import { useEffect, Fragment } from "react";
 import Nav from "./Nav";
 import New from "./New";
 import Home from "./Home";
-import Poll from "./Poll";
+import QuestionPage from "./QuestionPage";
 import Leaderboard from "./Leaderboard";
 import { useNavigate } from "react-router-dom";
 
@@ -18,7 +18,7 @@ const App = (props) => {
   useEffect (() =>
   { props.dispatch(handleInitialData()) 
       },[]);
-  if (props.authorUser === null )
+  if (props.autherUser === null )
   {
      return ( props.loading === true ? null :   <LoginPage />   
    )
@@ -35,7 +35,7 @@ const App = (props) => {
                <Route path="/home"  element={<Home />} /> 
                <Route path="/leaderborad" element={<Leaderboard />} />
                <Route path="/new" element={<New />} />
-               <Route path="/poll/:id"  element={<Poll />} /> 
+               <Route path="/question/:id"  element={<QuestionPage />} /> 
              </Routes>
            )}
       </div>
@@ -44,9 +44,9 @@ const App = (props) => {
   );
 };
 
-const mapStateToProps = ({ authorUser,users }) => ({
+const mapStateToProps = ({ autherUser,users }) => ({
   loading: users === null,
-  authorUser  : authorUser 
+  autherUser  : autherUser 
 
 }); 
 export default connect(mapStateToProps)(App);

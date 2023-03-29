@@ -1,6 +1,6 @@
-import { SET_AUTHED_USER } from "../actions/authorUser"
+import { SET_AUTHED_USER } from "../actions/autherUser"
 
-export  function authorUser(state = null,action)  {
+export  function autherUser(state = null,action)  {
   switch (action.type) {
     case SET_AUTHED_USER:
         return  action.id

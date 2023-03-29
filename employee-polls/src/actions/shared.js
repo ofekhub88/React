@@ -2,7 +2,7 @@
 import {_getUsers,_getQuestions}from "../data/_DATA";
 import { receiveUsers } from "./users";
 import { receiveQuestions } from "./questions";
-import { setAuthedUser } from "./authorUser";
+import { setAuthedUser } from "./autherUser";
 import { showLoading, hideLoading } from "react-redux-loading-bar";
 
 

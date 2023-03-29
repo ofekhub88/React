@@ -6,21 +6,23 @@ import { handleAddQuestion } from "../actions/questions"
 const New = ({ dispatch }) => {
 
   const navigate = useNavigate();
-  const [question, setQuestion] = useState({});
+  const [question, setQuestion] = useState({
+    optionOneText: "",
+    optionTwoText: "",
+  });
+ 
 
   const handleChangeOptionA = (e) => {
-    const text = e.target.value;
-    setQuestion(...question,{optionOneText: text});
+  
+     setQuestion({...question,optionOneText: e.target.value});
+
   };
   const handleChangeOptionB = (e) => {
-    const text = e.target.value;
-    setQuestion(...question,{optionTwoText: text});
+    setQuestion({...question,optionTwoText: e.target.value});
   };
   
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("===============")
-    console.log(question)
     dispatch(handleAddQuestion(question));
     navigate("/home")
     setQuestion({});
@@ -43,12 +45,12 @@ const New = ({ dispatch }) => {
    
   <div className="form-group">
     <label >Qestion One</label>
-    <input value={question["optionOneText"]} type="text" className="form-control" id="a"  placeholder="Enter option one "/>
+    <input value={question["optionOneText"]} onChange={(e) => handleChangeOptionA(e)} type="text" className="form-control" id="a"  placeholder="Enter option one "/>
    
   </div>
   <div className="form-group">
     <label >Qestion Two</label>
-    <input value={question["optionTwoText"]} type="text" className="form-control" id="b"  placeholder="Enter option tow"/>
+    <input value={question.optionTwoText} onChange={(e) => handleChangeOptionB(e)} type="text" className="form-control" id="b"  placeholder="Enter option tow"/>
   </div>
 
   
