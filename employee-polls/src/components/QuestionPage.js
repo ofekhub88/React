@@ -46,7 +46,7 @@ const handleAnser= (e) => {
    }));
     
     navigate("/home");
-    selectedOption(null)
+    setSelectedOption(null)
    
 }
 
