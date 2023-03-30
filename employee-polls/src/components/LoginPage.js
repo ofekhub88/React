@@ -9,20 +9,21 @@ const LoginPage = (props) => {
   const [selectedUser, setSelectedUser] = useState(null);
 
   
-  if (props.autherUser !== null)
-  {
-     return ( <Home />)
+  
+  if (props.autherUser !== null) {
+  
+     return null 
   }
   
 
   const handleChange = id => {
 
-      // e.preventDefault();
+     //  e.preventDefault();
     setSelectedUser(id)
   };
    
     const AddAuther =(e)=> {
-        e.preventDefault();
+        //e.preventDefault();
        if (selectedUser === null) {
         return alert("You have to select User First !");
        }

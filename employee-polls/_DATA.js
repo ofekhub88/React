@@ -39,7 +39,7 @@ let users = {
     id: 'zoshikanlu',
     password:'pass246',
     name: 'Zenobia Oshikanlu',
-    avatarURL: null,
+    avatarURL: './images/zoshikanlu.JPG',
     answers: {
       "xj352vofupe1dqz9emx13r": 'optionOne',
     },
@@ -172,7 +172,7 @@ export function _saveQuestion (question) {
         ...questions,
         [formattedQuestion.id]: formattedQuestion
       }
-
+cd s
       resolve(formattedQuestion)
     }, 1000)
   })

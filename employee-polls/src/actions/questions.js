@@ -24,6 +24,15 @@ function addQuestion(question) {
 }
 
 
+function answerQuestion({ authedUser, qid, answer }) {
+  return {
+    type: ANSWER_QUESTION,
+    qid,
+    authedUser,
+    answer,
+  };
+}
+
 export function handleAddQuestion(question) {
   return (dispatch, getState) => {
     const { autherUser } = getState();
@@ -40,24 +49,19 @@ export function handleAddQuestion(question) {
 
 
 
-function answerQuestion({ authedUser, qid, answer }) {
-  return {
-    type: ANSWER_QUESTION,
-    qid,
-    authedUser,
-    answer,
-  };
-}
 
 
 export function handleAnswerQuestion({ authedUser, qid, answer }) {
   return (dispatch) => {
-    dispatch(answerQuestion({ authedUser, qid, answer }));
-
-    return _saveQuestionAnswer({ authedUser, qid, answer }).catch((e) => {
+    dispatch(answerQuestion({ authedUser, qid, answer }))
+    dispatch(showLoading());
+    return _saveQuestionAnswer({ authedUser, qid, answer }).then(
+      dispatch(hideLoading())
+    )
+    .catch((e) => {
       console.warn("Error in handleAnswerQuestion: ", e);
       //dispatch(removeAnswerQuestion({ authedUser, qid, answer }));
       alert("The was an error liking the answer. Try again.");
-    });
+    }).then;
   };
 }

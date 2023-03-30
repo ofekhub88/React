@@ -7,37 +7,22 @@ export  function questions(state = {}, action) {
         ...state,
         ...action.questions,
       };
-
     case ANSWER_QUESTION:
-      console.log(state[action.qid].optionOne.votes );
-      return {
-      
-        ...state,
-        [action.qid]: {
-          ...state[action.qid],
-            optionOne: { ...state[action.qid].optionOne,
-               votes: action.answer === "optionOne"  ?
-                {...state[action.qid].optionOne.votes.filter(
-                (uid) => uid !== action.authedUser
-               ).concat(action.authedUser)}
-               :
-               {
-               ...state[action.qid].optionOne.votes.filter(
-                (uid) => uid !== action.authedUser)
-               }},
-            optionTwo: { ...state[action.qid].optionTwo,
-                votes: action.answer === "optionTwo" ?
-                 {...state[action.qid].optionTwo.votes.filter(
-                 (uid) => uid !== action.authedUser
-                ).concat(action.authedUser)}
-                :
-                {
-                ...state[action.qid].optionTwo.votes.filter(
-                 (uid) => uid !== action.authedUser)
-                }
-              }
+      let optionOne = {...state[action.qid].optionOne}
+      let optionTwo = {...state[action.qid].optionTwo}
+      if (action.answer === "optionOne") {
+        optionOne.votes = optionOne.votes.concat(action.authedUser)
       }
-      };
+      else{
+        optionTwo.votes = optionTwo.votes.concat(action.authedUser)
+      }
+      return {
+              ...state,
+               [action.qid]: {...state[action.qid],
+                   optionOne: optionOne,
+                   optionTwo: optionTwo
+                }
+        }
     case ADD_QUESTION:
       const { question } = action;
       

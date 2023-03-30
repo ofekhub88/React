@@ -21,18 +21,21 @@ const withRouter = (Component) => {
 
 const QuestionPage = (props) => {
   
-  const [ selectedOption,setSelectedOption ] = useState(null);
+  const [ selectedOption,setSelectedOption ] = useState(props.userOption);
   
   const handleChange = option => {
-       setSelectedOption(option)
-  };
+   if  (props.userOption === null) {
+      setSelectedOption(option)
+   }  }
   
-  const navigate = useNavigate();
   
+  
+const statCount = props.statCount
+const statPerc = props.statPerc
 if ( props.question  === undefined  || 
    props.user === undefined){
-    return (
-        null
+    return ( <div>  Wrong question id </div>
+       
            ) ;
        }
 
@@ -45,8 +48,6 @@ const handleAnser= (e) => {
        answer: selectedOption
    }));
     
-    navigate("/home");
-    setSelectedOption(null)
    
 }
 
@@ -74,17 +75,19 @@ return(
             <input className="form-check-input" type="radio" 
                    style={{ padding: 8}}
                    onChange={() => handleChange("optionOne")}
+                   disabled={ props.userOption !== null}
                     checked={selectedOption === "optionOne" ? true: false} 
            />
            <label  className="form-check-label"  
                style={{ paddingLeft: 10}} 
                onClick={ () => handleChange("optionOne") }>
-               {optionOne.text +"- ( Voted: "+props.statCount.optOneVotesNo+" , "+100*props.statPerc.optOneVotesPerc+" % )" }
+               {optionOne.text +"- ( Voted: "+statCount.optOneVotesNo+" , "+100*statPerc.optOneVotesPerc+" % )" }
                 </label>
          </div>
                     <h6>  OR </h6>
          <div className="custom-control custom-checkbox"  style={{ padding: 15}} key="1" > 
              <input className="form-check-input" type="radio"
+              disabled={ props.userOption !== null}
                 onChange={()  => handleChange("optionTwo")}
                  style={{ padding: 8}}
                  checked={selectedOption === "optionTwo" ? true: false} 
@@ -93,12 +96,12 @@ return(
                     style={{ paddingLeft: 10}} 
                     onClick={ () => handleChange( "optionTwo")} > 
                     
-                 { optionTwo.text +"- ( Voted: "+props.statCount.optTwoVotesNo+" , "+100*props.statPerc.optTwoVotesPerc+" % )"  } 
+                 { optionTwo.text +"- ( Voted: "+statCount.optTwoVotesNo+" , "+100*statPerc.optTwoVotesPerc+" % )"  } 
             </label>
          </div>
          <button className="btn btn-primary"
              type="submit" 
-             disabled={ selectedOption in [null,undefined]} >  
+             disabled={  props.userOption !== null || selectedOption in [null,undefined]} >  
             Submit your choise
           </button>
         </form>
@@ -118,24 +121,36 @@ function mapStateToProps({ users, questions ,autherUser},props) {
   
    const question = questions[props.qid.q_id];
    const user = question ? users[question.author]  : null ;
-
    const statCount= {
-          optOneVotesNo: question.optionOne.votes.length,
-          optTwoVotesNo: question.optionTwo.votes.length,
+      optOneVotesNo: question.optionOne.votes.length,
+      optTwoVotesNo: question.optionTwo.votes.length,
    }
    let total_votes = statCount.optOneVotesNo + statCount.optTwoVotesNo
    const statPerc = {
-      optOneVotesPerc: total_votes === 0 ? 0 : statCount.optOneVotesNo /total_votes,
-      optTwoVotesPerc: total_votes === 0 ? 0 : statCount.optTwoVotesNo /total_votes
+   optOneVotesPerc: total_votes === 0 ? 0 : statCount.optOneVotesNo /total_votes,
+   optTwoVotesPerc: total_votes === 0 ? 0 : statCount.optTwoVotesNo /total_votes
    }
+   let userOption = null
+   
+    if ( question.optionOne.votes.includes(autherUser)) {
+     
+      userOption = "optionOne"
+    }
+    else if ( question.optionTwo.votes.includes(autherUser))
+    {
+      
+      userOption = "optionTwo"
+    }
+
+    console.log(userOption)
        
    return {
          autherUser,
       question: question,
       user: user,
-      statPerc: statPerc,
-      statCount: statCount,
-      questions: questions
+      statPerc,
+      statCount,
+      userOption: userOption
 
     }
 };

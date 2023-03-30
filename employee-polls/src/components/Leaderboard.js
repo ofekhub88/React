@@ -1,12 +1,10 @@
 import { connect } from "react-redux";
-import Question from "./QuestionPage";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle';
-import { handleSetAuther } from "../actions/autherUser"
+
 
 const Leaderboard = (props) => {
  
-  props.dispatch(handleSetAuther("tylermcginnis"))
   return (
     <div>
   
@@ -45,9 +43,11 @@ const Leaderboard = (props) => {
 
 
 const mapStateToProps = ({users}) => {
-
+    const users_ids = Object.keys(users).sort((a,b) => 
+    Object.keys(users[b].answers).length -  Object.keys(users[a].answers).length)
+    console.log(users_ids)
     return { 
-        user_ids: Object.keys(users).sort(id => Object.keys(users[id].answers).length ),
+        user_ids: users_ids,
         users: users
  };
  

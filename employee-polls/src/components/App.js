@@ -9,7 +9,7 @@ import New from "./New";
 import Home from "./Home";
 import QuestionPage from "./QuestionPage";
 import Leaderboard from "./Leaderboard";
-import { useNavigate } from "react-router-dom";
+
 
 
 const App = (props) => {
@@ -23,6 +23,7 @@ const App = (props) => {
      return ( props.loading === true ? null :   <LoginPage />   
    )
   }
+
  return (
     <div>
     <Fragment>
@@ -31,11 +32,13 @@ const App = (props) => {
            <Nav />
            {props.loading === true ? null : (
              <Routes>
-               <Route path="/" exact element={<LoginPage />} /> 
+               <Route path="/" exact element={<Home />} /> 
                <Route path="/home"  element={<Home />} /> 
                <Route path="/leaderborad" element={<Leaderboard />} />
                <Route path="/new" element={<New />} />
                <Route path="/question/:id"  element={<QuestionPage />} /> 
+               
+               
              </Routes>
            )}
       </div>
