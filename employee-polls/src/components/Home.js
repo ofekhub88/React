@@ -9,14 +9,13 @@ const Home = (props) => {
  
   return (
     <div>
-  
-  <h3  data-testid="home-card"> >Empoloyy Pools</h3>
+  <h3  data-testid="home-card"> Employee Pools</h3>
  <div className="row">
   <div className="col-sm-5">
   <p className="fs-4">
     Pools i voted already for . </p>
   { props.iVotedToIds.map(id =>
-        <Question id = {id} voted={true}/>
+        <Question id={id} voted={true} key={id}/>
       )
 }
   </div>
@@ -25,7 +24,7 @@ const Home = (props) => {
   Pools i didnt vote yet </p>
     { props.NotVotedToIds.map(id =>
     
-        <Poll id = {id} voted={false} />)
+        <Poll id = {id} voted={false} key={id}/>)
 }
   </div>
 </div>

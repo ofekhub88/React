@@ -10,7 +10,7 @@ const LoginPage = (props) => {
 
   
   
-  if (props.autherUser !== null) {
+  if (props.autherUser || props.autherUser !== null) {
   
      return null 
   }
@@ -24,12 +24,9 @@ const LoginPage = (props) => {
    
     const AddAuther =(e)=> {
         //e.preventDefault();
-       if (selectedUser === null) {
-        return alert("You have to select User First !");
-       }
-       else {
+
         props.dispatch(handleSetAuther(selectedUser))
-        };
+
       }
    
     return ( <div className="card">
@@ -42,18 +39,20 @@ const LoginPage = (props) => {
         return ( 
           
           <div className="form-check"  key={id} >
-            
             <input className="form-check-input" type="radio"
             onChange={() => handleChange(id)}
-             value={id}  
-             checked={selectedUser === id ? true: false} 
+             value={id} 
+             checked={selectedUser === id ? true: false}
+             data-testid={"checked"+id}
           />
 
-            <label className="form-check-label"     onClick={ () => handleChange(id)} > {props.users[id].id +" - " +props.users[id].name}  </label>
+            <label className="form-check-label"  data-testid={id}   onClick={ () => handleChange(id)} > {props.users[id].id +" - " +props.users[id].name}  </label>
             
            
          </div>)})}
-         <button className="btn btn-primary" type="submit" disabled ={selectedUser === null}>
+         <button className="btn btn-primary" type="submit" 
+           disabled ={selectedUser === null} 
+           data-testid="Submit">
             Login
           </button>
         </form>

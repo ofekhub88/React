@@ -24,13 +24,13 @@ const New = ({ dispatch }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(handleAddQuestion(question));
-    navigate("/home")
+    navigate("/")
     setQuestion({});
     
 
   };
 
-  //const questionLeft = 280 - text.length;
+  
 
   return (
     <div>
@@ -52,16 +52,13 @@ const New = ({ dispatch }) => {
     <label >Qestion Two</label>
     <input value={question.optionTwoText} onChange={(e) => handleChangeOptionB(e)} type="text" className="form-control" id="b"  placeholder="Enter option tow"/>
   </div>
-
-  
        </div>
        <div className="card-footer text-muted">
        <button  disabled={question === {} || question["optionOneText"] === ""  || question["optionTwoText"] === ""} className="btn btn-primary">Submit</button>
-       
        </div>
        </form>
-</div>
-</div>
+     </div>
+  </div>
   );
 };
 

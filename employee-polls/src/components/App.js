@@ -11,14 +11,13 @@ import QuestionPage from "./QuestionPage";
 import Leaderboard from "./Leaderboard";
 
 
-
 const App = (props) => {
 
- 
   useEffect (() =>
   { props.dispatch(handleInitialData()) 
       },[]);
-  if (props.autherUser in [null,undefined] )
+
+  if (!props.autherUser || props.autherUser in [null,undefined] )
   {
      return ( props.loading === true ? null :   <LoginPage />   
    )
@@ -31,15 +30,13 @@ const App = (props) => {
       {props.loading === true ? null :
         <div className="container">
         <Nav /> 
-        (        
              <Routes>
                <Route path="/" exact element={<Home />} /> 
-               <Route path="/home"  element={<Home />} /> 
                <Route path="/leaderborad" element={<Leaderboard />} />
                <Route path="/new" element={<New />} />
                <Route path="/question/:id"  element={<QuestionPage />} /> 
              </Routes>
-           )
+           
       </div>
 }
     </Fragment>
@@ -48,14 +45,10 @@ const App = (props) => {
 };
 
 const mapStateToProps = ({ autherUser,users }) => ({
-  loading: users in [null,undefined],
+  
+  loading: !users ,
   autherUser: autherUser 
-
-}); 
+  
+});
 export default connect(mapStateToProps)(App);
 
-/*
-<Route path="/" exact element={<Dashboard />} />
-
-<Route path="/new" element={<NewTweet />} />
-*/
