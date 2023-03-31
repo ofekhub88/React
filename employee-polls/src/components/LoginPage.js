@@ -33,7 +33,7 @@ const LoginPage = (props) => {
       }
    
     return ( <div className="card">
-    <div className="card-header">
+    <div className="card-header" data-testid="login-card">
       Login into employee polls
     </div>
     <div className="card-body">

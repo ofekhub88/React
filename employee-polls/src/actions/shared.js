@@ -11,10 +11,10 @@ export  function handleInitialData() {
   return (dispatch) => {
     dispatch(showLoading());
     return Promise.all([_getUsers(), _getQuestions()]).then(
+
       ([users, question]) => {
         dispatch(receiveUsers(users));
         dispatch(receiveQuestions(question));
-        dispatch(setAuthedUser(null));
         dispatch(hideLoading());
       }
     );

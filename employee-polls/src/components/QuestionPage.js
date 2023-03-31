@@ -81,7 +81,7 @@ return(
            <label  className="form-check-label"  
                style={{ paddingLeft: 10}} 
                onClick={ () => handleChange("optionOne") }>
-               {optionOne.text +"- ( Voted: "+statCount.optOneVotesNo+" , "+100*statPerc.optOneVotesPerc+" % )" }
+               {optionOne.text +"- ( Voted: "+statCount.optOneVotesNo+" , "+Math.round(100*statPerc.optOneVotesPerc)+" % )" }
                 </label>
          </div>
                     <h6>  OR </h6>
@@ -96,7 +96,7 @@ return(
                     style={{ paddingLeft: 10}} 
                     onClick={ () => handleChange( "optionTwo")} > 
                     
-                 { optionTwo.text +"- ( Voted: "+statCount.optTwoVotesNo+" , "+100*statPerc.optTwoVotesPerc+" % )"  } 
+                 { optionTwo.text +"- ( Voted: "+statCount.optTwoVotesNo+" , "+Math.round(100*statPerc.optTwoVotesPerc)+" % )"  } 
             </label>
          </div>
          <button className="btn btn-primary"

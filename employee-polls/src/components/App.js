@@ -18,7 +18,7 @@ const App = (props) => {
   useEffect (() =>
   { props.dispatch(handleInitialData()) 
       },[]);
-  if (props.autherUser === null )
+  if (props.autherUser in [null,undefined] )
   {
      return ( props.loading === true ? null :   <LoginPage />   
    )
@@ -28,28 +28,28 @@ const App = (props) => {
     <div>
     <Fragment>
       <LoadingBar />
+      {props.loading === true ? null :
         <div className="container">
-           <Nav />
-           {props.loading === true ? null : (
+        <Nav /> 
+        (        
              <Routes>
                <Route path="/" exact element={<Home />} /> 
                <Route path="/home"  element={<Home />} /> 
                <Route path="/leaderborad" element={<Leaderboard />} />
                <Route path="/new" element={<New />} />
                <Route path="/question/:id"  element={<QuestionPage />} /> 
-               
-               
              </Routes>
-           )}
+           )
       </div>
+}
     </Fragment>
     </div>
   );
 };
 
 const mapStateToProps = ({ autherUser,users }) => ({
-  loading: users === null,
-  autherUser  : autherUser 
+  loading: users in [null,undefined],
+  autherUser: autherUser 
 
 }); 
 export default connect(mapStateToProps)(App);

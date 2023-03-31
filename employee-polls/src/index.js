@@ -9,7 +9,7 @@ import middleware from "./middleware";
 import App from "./components/App";
 import { BrowserRouter } from 'react-router-dom';
 
-const store = createStore(reducer, middleware);
+export const store = createStore(reducer, middleware);
 
 const root = ReactDOM.createRoot(
   document.getElementById("root")
