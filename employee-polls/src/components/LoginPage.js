@@ -2,8 +2,6 @@
 import { connect } from "react-redux";
 import { useState } from "react";
 import { handleSetAuther } from "../actions/autherUser"
-import { Navigate, useNavigate } from "react-router-dom";
-import Home  from "./Home"
 
 const LoginPage = (props) => {
   const [selectedUser, setSelectedUser] = useState(null);

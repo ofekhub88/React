@@ -1,14 +1,13 @@
 
 import { formatDate } from "../data/utils";
-import {  Link } from "react-router-dom";
 import { connect } from "react-redux";
+import { Link } from "react-router-dom";
+
 
 const Question = (props) => {
- 
+
   const {author,
       timestamp,
-      optionOne,
-      optionTwo,
       id
     } = props.question;
 
@@ -19,12 +18,11 @@ const Question = (props) => {
 
 const user_name = props.user.name
 const user_id = props.user.id
-const user_questions = props.user.question ? props.user.question : null
 
    
     return(
 
-      <div className="card border-success mb-3" style={{maxWidth: "18"}}>
+      <div className="card h-100" style={{maxWidth: "18" }}>
         <div className="card-header">
           <img className="rounded  thumbnail-box-shadow: d-block"   width="30" height="30" src={process.env.PUBLIC_URL + '/img/' + user_id + '.JPG'} alt={`Avatar of ${author}`}  />
           <span>{user_name}</span></div>
@@ -46,7 +44,8 @@ const user_questions = props.user.question ? props.user.question : null
 };
 
 
-function mapStateToProps({  users, questions }, { id }) {
+function mapStateToProps({authedUser,  users, questions }, { id }) {
+ 
 
     const question = questions[id];
     
@@ -56,6 +55,7 @@ function mapStateToProps({  users, questions }, { id }) {
       user: user
 
     }
+  
   }
   
   export default connect(mapStateToProps)(Question);

@@ -1,15 +1,16 @@
+
+
 export const SET_AUTHED_USER = "SET_AUTHED_USER";
+
 
 export function setAuthedUser(id) {
   return {
     type: SET_AUTHED_USER,
-    id,
+    id
   };
 }
 
 export function handleSetAuther(id) {
-  return {
-    type: SET_AUTHED_USER,
-    id
-  };
+  
+  return setAuthedUser(id)
 }

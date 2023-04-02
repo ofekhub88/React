@@ -6,7 +6,7 @@ import { handleSetAuther } from "../actions/autherUser"
 const Nav = (props) => {
 
   const handleLogOut = (e) => 
-  { props.dispatch(handleSetAuther(null)) 
+  { props.dispatch(handleSetAuther(null)) ;
      }
     if (!props.user) {
       return null

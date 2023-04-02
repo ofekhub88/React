@@ -1,9 +1,8 @@
 import { connect } from "react-redux";
-import { useParams,useNavigate } from "react-router-dom";
+import { useParams,Navigate } from "react-router-dom";
 import { formatDate } from "../data/utils";
-import { useState , useEffect} from "react";
+import { useState } from "react";
 import { handleAnswerQuestion } from "../actions/questions";
-
 
 
 const withRouter = (Component) => {
@@ -12,45 +11,33 @@ const withRouter = (Component) => {
      const q_id = id.split("=")[1]
      return <Component {...props} qid={{ q_id }} />;
    };
- 
-   return ComponentWithRouterProp;
- };
- 
-
+};
 
 const QuestionPage = (props) => {
 
-   const [ selectedOption,setSelectedOption ] = useState(
-      props.userOption? props.userOption : undefined );
-      const navigate = useNavigate()
-      useEffect(() => {
-         if (props.question === undefined )
-           {navigate('/404') }
-       }, [props.question]);
+  const [ selectedOption,setSelectedOption ] = useState("");
 
-       if (props.question === undefined ){
+if ( props.question === undefined){
+    return  <Navigate to="/404"/>
+       }
+       else{
          return null
        }
-  const handleChange = option => {
-   if  (props.userOption === null) {
-      setSelectedOption(option)
-   }  }
-  
-  
+       
 const statCount = props.statCount
 const statPerc = props.statPerc
-     
-
+const handleChange = option => {
+    if  (props.userOption === null) {
+            setSelectedOption(option)
+         }
+      }
 const handleAnser= (e) => {
    e.preventDefault();
-
    props.dispatch(handleAnswerQuestion({
       authedUser: props.autherUser,
        qid: props.question.id,
        answer: selectedOption
-   }));
-    
-   
+   })); 
 }
 
 const {author,
@@ -103,7 +90,7 @@ return(
          </div>
          <button className="btn btn-primary"
              type="submit" 
-             disabled={  props.userOption|| !selectedOption } >  
+             disabled={  props.userOption || !selectedOption } >  
             Submit your choise
           </button>
         </form>
@@ -120,47 +107,40 @@ return(
 
 
 function mapStateToProps({ users, questions ,autherUser},props) {
-   
+  
    const question = questions[props.qid.q_id];
-   if (question ) {
-        const user = question ? users[question.author]  : null ;
-        const statCount= {
-           optOneVotesNo: question.optionOne.votes.length,
-           optTwoVotesNo: question.optionTwo.votes.length,
-        }
-        let total_votes = statCount.optOneVotesNo + statCount.optTwoVotesNo
-        const statPerc = {
-        optOneVotesPerc: total_votes === 0 ? 0 : statCount.optOneVotesNo /total_votes,
-        optTwoVotesPerc: total_votes === 0 ? 0 : statCount.optTwoVotesNo /total_votes
-        }
-        let userOption = null
-        
-        if ( question.optionOne.votes.includes(autherUser)) {
-          
-           userOption = "optionOne"
-         }
-         else if ( question.optionTwo.votes.includes(autherUser))
-         {
-           
-           userOption = "optionTwo"
-         }
-     
-                     
-        return {
-              autherUser: autherUser,
-           question: question,
-           user: user,
-           statPerc,
-           statCount,
-           userOption: userOption
-         }
-        
-   } else {
-      return {
-         autherUser: autherUser,
-         question: undefined,
-      }
+   const user = question ? users[question.author]  : null ;
+   const statCount= {
+      optOneVotesNo: question.optionOne.votes.length,
+      optTwoVotesNo: question.optionTwo.votes.length,
    }
+   let total_votes = statCount.optOneVotesNo + statCount.optTwoVotesNo
+   const statPerc = {
+   optOneVotesPerc: total_votes === 0 ? 0 : statCount.optOneVotesNo /total_votes,
+   optTwoVotesPerc: total_votes === 0 ? 0 : statCount.optTwoVotesNo /total_votes
+   }
+   let userOption = null
+   
+    if ( question.optionOne.votes.includes(autherUser)) {
+     
+      userOption = "optionOne"
+    }
+    else if ( question.optionTwo.votes.includes(autherUser))
+    {
+      
+      userOption = "optionTwo"
+    }
+       
+   return {
+         autherUser,
+      question: question,
+      user: user,
+      statPerc,
+      statCount,
+      userOption: userOption
+
+    }
+
 };
 
 export default withRouter(connect(mapStateToProps)(QuestionPage));

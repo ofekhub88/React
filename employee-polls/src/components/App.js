@@ -1,5 +1,5 @@
 import { connect } from "react-redux";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route,NotFoundRoute} from "react-router-dom";
 import LoadingBar from "react-redux-loading-bar";
 import { handleInitialData } from "../actions/shared"
 import LoginPage from "./LoginPage";
@@ -9,6 +9,7 @@ import New from "./New";
 import Home from "./Home";
 import QuestionPage from "./QuestionPage";
 import Leaderboard from "./Leaderboard";
+import ErrorPage from "./404"
 
 
 const App = (props) => {
@@ -35,6 +36,7 @@ const App = (props) => {
                <Route path="/leaderborad" element={<Leaderboard />} />
                <Route path="/new" element={<New />} />
                <Route path="/question/:id"  element={<QuestionPage />} /> 
+               <Route path="*" exact element={<ErrorPage />} />
              </Routes>
            
       </div>
@@ -51,4 +53,3 @@ const mapStateToProps = ({ autherUser,users }) => ({
   
 });
 export default connect(mapStateToProps)(App);
-

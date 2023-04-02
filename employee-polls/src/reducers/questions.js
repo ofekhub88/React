@@ -23,9 +23,7 @@ export  function questions(state = {}, action) {
                    optionTwo: optionTwo
                 }
         }
-    case ADD_QUESTION:
-      const { question } = action;
-      
+    case ADD_QUESTION:    
       return {
         ...state,
         [action.question.id]: action.question,
