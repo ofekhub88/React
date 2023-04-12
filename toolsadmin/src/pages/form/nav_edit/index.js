@@ -1,7 +1,11 @@
 // ** React Imports
 import { forwardRef, useState ,useEffect} from 'react'
 import { csrftoken , config } from "../../../Config"
-
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 // ** MUI Imports
 import Card from '@mui/material/Card'
 import Grid from '@mui/material/Grid'
@@ -9,6 +13,7 @@ import Button from '@mui/material/Button'
 import Divider from '@mui/material/Divider'
 import MenuItem from '@mui/material/MenuItem'
 import TextField from '@mui/material/TextField'
+import Input from '@mui/material/Input'
 import CardHeader from '@mui/material/CardHeader'
 import InputLabel from '@mui/material/InputLabel'
 import IconButton from '@mui/material/IconButton'
@@ -28,15 +33,12 @@ import Autocomplete from '@mui/material/Autocomplete'
 import Checkbox from '@mui/material/Checkbox'
 import FormGroup from '@mui/material/FormGroup'
 import FormControlLabel from '@mui/material/FormControlLabel'
+import DialogContent from '@mui/material/DialogContent'
 
 
 
 
-const CustomInput = forwardRef((props, ref) => {
-  return <TextField fullWidth {...props} inputRef={ref} label='Birth Date' autoComplete='off' />
-})
-
-const NavEdit = ({nodeid,handleClose}) => {
+const NavEdit = ({navState,handleClose,UpdateCounter}) => {
   // ** States
   const [date, setDate] = useState(null)
   const [icons,setIcons] =  useState(listIcons(''))
@@ -46,22 +48,32 @@ const NavEdit = ({nodeid,handleClose}) => {
   const url = config.API_SERVER+"/nav_edit"
   const [open, setOpen] = useState(false)
   useEffect(() => {
-      nodeid &&
-      fetch(url+"?nodeid="+nodeid,config.requestOptions).
+      navState.nodeId &&
+      fetch(url+"?nodeid="+navState.nodeId,config.requestOptions).
       then(response =>  response.json()).
       then((data) => {
       setNode(data)
       setOrigenNode(data)
     }).catch((err) => console.log(err));
   }, [])
- 
+  const parnet_list = {0: "Root"}
+  const parent_ids = (tree) => {
+       let a= tree.map((item) => {
+           if (item.path === undefined && String(item.id) !== navState.nodeId ){
+             parnet_list[item.id] = item.title
+           }
+           if (item.children ) {
+              parent_ids(item.children)
+           } 
+    })
+  }
+parent_ids(navState.menuItems)
 
   const handleSubmit = (() => {
-    if (nodeid) {
+    if (navState.nodeId) {
          let putRequestOptions = {...config.requestOptions}
          putRequestOptions["method"] = "PUT"
          putRequestOptions["body"] = JSON.stringify(node)
-         console.log(putRequestOptions)
          fetch(url,putRequestOptions).
          then(response =>  response.json()).
          then((data) => {
@@ -76,7 +88,8 @@ const NavEdit = ({nodeid,handleClose}) => {
       console.log(data)
     }).catch((err) => console.log(err));
      }
-    return(handleClose)
+     UpdateCounter.u(UpdateCounter.c+1)
+    return(handleClose())
 })
 
 
@@ -87,9 +100,15 @@ const NavEdit = ({nodeid,handleClose}) => {
                         "tooltip","badgeContent","action"]
   const rquiredList = ["title"]
   const TrueFalse   = ["disabled", "openInNewTab","externalLink"]
-  const filedList   = {badgeColor: ['default' , 'primary' , 
+  const filedList   = [{name : "badgeColor",
+                        options : ['default' , 'primary' , 
                                   'secondary' , 'success' , 'error' , 
-                                  'warning' , 'info' ]}
+                                  'warning' , 'info' ]},
+                        {name: "parent_id",
+                         options: parnet_list},
+                        {name: "order_nav",
+                         options: [...Array(20).keys()]
+                        }        ]
 
   const handleTextChange = (e,item) =>{
     e.preventDefault();
@@ -109,9 +128,19 @@ const NavEdit = ({nodeid,handleClose}) => {
     new_node[item] = value
     setNode(new_node)
   }
-
+  const handleDelete = () =>{
+    e.preventDefault();
+    let putRequestOptions = {...config.requestOptions}
+         putRequestOptions["method"] = "DELETE"
+         fetch(url+"?nodeid="+navState.nodeId,putRequestOptions).
+         then(response =>  response.json()).
+         then((data) => {
+       }).catch((err) => console.log(err));
+  }
   return (
+    <DialogContent >
     <Card>
+      
       <CardHeader title='Edit Menue' />
       <Divider sx={{ m: '0 !important' }} />
       <form onSubmit={e => e.preventDefault()}>
@@ -124,14 +153,37 @@ const NavEdit = ({nodeid,handleClose}) => {
             </Grid>
             { textFileds.map((item,i) => 
             <Grid item xs={12} sm={6}>
-              <TextField required={rquiredList.includes(item)} defaultValue={node[item]} value={node[item]} onChange={e => handleTextChange(e,item) } fullWidth label={item} key={i} />
+              <Input required={rquiredList.includes(item)}  value={node[item]} placeholder={item} onChange={e => handleTextChange(e,item) } fullWidth  variant="outlined" label={item} key={i} />
             </Grid>)}
+              {filedList.map((item,i) =>
+              <Grid item xs={6} sm={4}>
+                <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
+                <InputLabel>{item.name }</InputLabel>
+                 <Select 
+                     labelId="select-label"
+                     id={i}
+                     defaultValue={node[item.name]}
+                     value={!node[item.name]?"":node[item.name] }
+                     label={item.name}
+                     onChange= {e =>  handleListChange(e,e.target.value,item.name)}
+                   >
+                   { Array.isArray(item.options)? 
+                   item.options.map(key => <MenuItem key={key} value={key}>{key}</MenuItem>)
+                   :
+                    Object.keys(item.options).map(key => <MenuItem key={key} value={key}>{item.options[key]}</MenuItem>)
+                     
+                     }
+                   </Select>
+                   </FormControl>
+               </Grid>
+              )}
             <Grid item xs={6} sm={4}>
             <FormGroup row sx={{ mt: 4 }}>
               {TrueFalse.map((item,i) =>
               <FormControlLabel  checked={node[item] === undefined? false: node[item]} onChange={e => handleCheckChange(e,item) } label={item} control={<Checkbox />} labelPlacement='end' sx={{ mr: 4 }}  key={i} />
               )}
             </FormGroup>
+            
             </Grid>
             <Grid item xs={12}>
             </Grid>
@@ -155,8 +207,11 @@ const NavEdit = ({nodeid,handleClose}) => {
           </Grid>
         </CardContent>
         <CardActions>
-          <Button disabled={ origenNode === node } size='large' type='submit' sx={{ mr: 2 }} variant='contained' onClick={() => handleSubmit()}>
+          <Button disabled={ origenNode === node || [!node.order_nav,!node.title,!node.parent_id].includes(true) } size='large' type='submit' sx={{ mr: 2 }} variant='contained' onClick={() => handleSubmit()}>
             Submit
+          </Button>
+          <Button disabled={!node.id || navState.children === "Y" } size='large' type='submit' sx={{ mr: 2 }} variant='contained' onClick={() => handleDelete()}>
+            delete
           </Button>
           <Button size='large' type='submit' sx={{ mr: 2 }} variant='contained' onClick={() => handleClose()}>
             Cancel
@@ -164,6 +219,26 @@ const NavEdit = ({nodeid,handleClose}) => {
         </CardActions>
       </form>
     </Card>
+    </DialogContent>
+    <Dialog
+        open={open}
+        TransitionComponent={Transition}
+        keepMounted
+        onClose={handleClose}
+        aria-describedby="alert-dialog-slide-description"
+      >
+        <DialogTitle>{"Use Google's location service?"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-slide-description">
+            Let Google help apps determine location. This means sending anonymous
+            location data to Google, even when no apps are running.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Disagree</Button>
+          <Button onClick={handleClose}>Agree</Button>
+        </DialogActions>
+      </Dialog>
   )
 }
 

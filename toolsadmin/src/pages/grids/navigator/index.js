@@ -2,11 +2,11 @@
 import { csrftoken , config } from "../../../Config"
 
 import DialogTitle from '@mui/material/DialogTitle'
-import DialogContent from '@mui/material/DialogContent'
+
 import DialogActions from '@mui/material/DialogActions'
 import Dialog, { DialogProps } from '@mui/material/Dialog'
 import DialogContentText from '@mui/material/DialogContentText'
-
+import AlertDialogSlide from  "../../form/dialog_alert"
 // ** MUI Imports
 import Box from '@mui/material/Box'
 import TreeView from '@mui/lab/TreeView'
@@ -46,9 +46,9 @@ const StyledTreeItemRoot = styled(TreeItem)(({ theme }) => ({
     paddingRight: theme.spacing(6)
   },
   '& .MuiTreeItem-group': {
-    marginLeft: 0,
+    marginLeft: 4,
     '& .MuiTreeItem-content': {
-      paddingLeft: theme.spacing(4),
+      paddingLeft: theme.spacing(3),
       fontWeight: theme.typography.fontWeightRegular
     }
   }
@@ -62,7 +62,7 @@ const StyledTreeItem = props => {
     <StyledTreeItemRoot
       {...other}
       label={
-        <Box sx={{ py: 1, display: 'flex', alignItems: 'center', '& svg': { mr: 1 } }}>
+        <Box sx={{ py: 2, display: 'flex', alignItems: 'center', '& svg': { mr: 1} }}>
           <Icon icon={labelIcon} color='inherit' />
           <Typography variant='body2' sx={{ flexGrow: 1, fontWeight: 'inherit' }}>
             {labelText}
@@ -81,37 +81,48 @@ const StyledTreeItem = props => {
 
 
 const Navigator = () => {
-  const [menuItems,setMenuItems] = useState()
-  const [nodeId,setNodeID] = useState(null)
+  const [navState,setNavState] = useState({ menuItems : [],
+                                    nodeId: null,
+                                    open: false,
+                                    newNode: true,
+                                    parent_id: null,
+                                    children: null
+                                    })
+
+  const [counter,setCounter] = useState(0)
   const url = config.API_SERVER+"/nav_edit"
-  const [open, setOpen] = useState(false)
 
   useEffect(() => {
       fetch(url,config.requestOptions).then(response =>  response.json()).
       then((data) => {
       const menuArray = data; 
-      setMenuItems(menuArray)
+      setNavState({...navState,menuItems: menuArray})
     }).catch((err) => console.log(err));
-  }, [])
+  }, [counter])
 
   const handleNodeSelect = (e,node) =>{
-    console.log(node)
-       setNodeID(node)
+       const id = node.split(":")[0]
+       const path = node.split(":")[1]
+       const children = node.split(":")[2]
+       setNavState({...navState,nodeId: id,newNode: path !== "undefined",children: children })
   }
-  const handleClickOpen = () => {
-    setOpen(true)
+  const handleClickOpen = (mode) => {
+    setNavState({...navState,open: true})
   }
 
-  const handleClose = () => setOpen(false)
+  const handleAddNode = () => {
+    setNavState({...navState,parent_id: navState.nodeId})
+    setNavState({...navState,nodeId: null,open: true})
+  }
+  const handleClose = () => setNavState({...navState,open: false})
   const NodeList={}
   const build_tree = (tree) => {
        return( 
                 tree.map((item) => item.children ? 
-                  <StyledTreeItem key={item.id} nodeId={item.id.toString()} labelText={item.title} labelIcon={item.icon} > 
+                  <StyledTreeItem key={item.id} nodeId={item.id.toString()+":"+ item.path+":Y"} labelText={item.title+ (item.path? " -> "+item.path: "")} labelIcon={item.icon} > 
                     {build_tree(item.children)}
-                  </StyledTreeItem> :
-                  
-                  <StyledTreeItem key={item.id}  nodeId={item.id.toString()} labelText={item.title} labelIcon={item.icon} />
+                  </StyledTreeItem> :         
+                  <StyledTreeItem key={item.id}  nodeId={item.id.toString()+":"+item.path+":N"} labelText={item.title + (item.path? " -> "+item.path: "")} labelIcon={item.icon} />
                 ) 
              );
       
@@ -121,33 +132,35 @@ const Navigator = () => {
       <Card>
       <CardHeader title='navigator view' />
     <TreeView
-      defaultExpanded={['3']}
+      defaultExpanded={[0]}
       sx={{ minHeight: 240 }}
       defaultExpandIcon={<Icon icon='tabler:chevron-right'/>}
       defaultCollapseIcon={<Icon icon='tabler:chevron-down' />}
       onNodeSelect={(e,node)=> handleNodeSelect(e,node)}
     >
-      {menuItems &&  build_tree(menuItems)} 
-
+      <StyledTreeItem  key="0" nodeId={"0:undefined"} labelText="Root" >
+      {navState.menuItems &&  build_tree(navState.menuItems)} 
+      </StyledTreeItem>
     </TreeView>
-    <CardActions>
-          <Button disabled={nodeId === null} size='small' type='submit' sx={{ mr: 2 }} variant='contained' onClick={e => handleClickOpen()}>
+    <CardActions>  
+    
+          <Button disabled={[null,"0"].includes(navState.nodeId) } size='small' type='submit' sx={{ mr: 2 }} variant='contained' onClick={e => handleClickOpen("Edit")}>
             Edit node
           </Button>
-        <Button size='small' type='submit' sx={{ mr: 2 }} variant='contained'>
+        <Button disabled={navState.newNode} size='small' type='submit' sx={{ mr: 2 }} variant='contained' onClick={e => handleAddNode()}>
             Add Node
           </Button>
         </CardActions>
     </Card>
     <Dialog
-        open={open}
+        open={navState.open}
         onClose={handleClose}
         aria-labelledby='scroll-dialog-title'
         aria-describedby='scroll-dialog-description'
       >
-        <DialogContent >
-           <NavEdit handleClose={handleClose} nodeid={nodeId}/>
-        </DialogContent>
+        
+          <NavEdit handleClose={handleClose} navState={navState} UpdateCounter={{u:setCounter ,c: counter}} />
+        
       </Dialog>
     </div>
   )
