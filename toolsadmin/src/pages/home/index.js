@@ -4,9 +4,12 @@ import Grid from '@mui/material/Grid'
 import Typography from '@mui/material/Typography'
 import CardHeader from '@mui/material/CardHeader'
 import CardContent from '@mui/material/CardContent'
-import { csrftoken , config } from "../../Config"
+import { csrftoken , config } from "src/configs/Config"
+import {  useEffect,useState } from 'react'
+import authConfig from 'src/configs/auth'
 
 const Home = () => {
+  
   return (
     <Grid container spacing={6}>
       <Grid item xs={12}>
@@ -18,6 +21,7 @@ const Home = () => {
               Please make sure to read our Template Documentation to understand where to go from here and how to use our
               template.
             </Typography>
+            
           </CardContent>
         </Card>
       </Grid>
@@ -28,6 +32,7 @@ const Home = () => {
             <Typography sx={{ mb: 2 }}>
               Access Control (ACL) and Authentication (JWT) are the two main security features of our template and are implemented in the starter-kit as well.
             </Typography>
+         
             <Typography>Please read our Authentication and ACL Documentations to get more out of them.</Typography>
           </CardContent>
         </Card>
@@ -35,5 +40,7 @@ const Home = () => {
     </Grid>
   )
 }
+
+//
 
 export default Home

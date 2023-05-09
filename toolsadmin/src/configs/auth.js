@@ -1,7 +1,8 @@
 export default {
-  meEndpoint: '/auth/me',
-  loginEndpoint: '/jwt/login',
-  registerEndpoint: '/jwt/register',
-  storageTokenKeyName: 'accessToken',
-  onTokenExpiration: 'refreshToken' // logout | refreshToken
+  meEndpoint: 'http://127.0.0.1:8000/api/token/verify/',
+  loginEndpoint: 'http://127.0.0.1:8000/api/token/',
+  photoEndpoint: 'http://127.0.0.1:8000/api/token/photo',
+  storageTokenKeyName: 'access',
+  onTokenExpiration: 'refresh',
+  tokenPrefix: "Doxer "
 }

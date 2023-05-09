@@ -1,6 +1,6 @@
 // ** React Imports
 import { useEffect, useState } from 'react'
-import { csrftoken , config } from "../../../Config"
+import { csrftoken , config } from "src/configs/Config"
 // ** Axios Import
 import axios from 'axios'
 

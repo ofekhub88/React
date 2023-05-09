@@ -1,25 +1,33 @@
 // ** To use core palette, uncomment the below import
-// import { PaletteMode } from '@mui/material'
+import { PaletteMode } from '@mui/material'
 // ** To use core palette, uncomment the below import
-// import corePalette from 'src/@core/theme/palette'
+import corePalette from 'src/@core/theme/palette'
 // ** To use mode (light/dark/semi-dark), skin(default/bordered), direction(ltr/rtl), etc. for conditional styles, uncomment below line
-// import { useSettings } from 'src/@core/hooks/useSettings'
+import { useSettings } from 'src/@core/hooks/useSettings'
 const UserThemeOptions = () => {
   // ** To use mode (light/dark/semi-dark), skin(default/bordered), direction(ltr/rtl), etc. for conditional styles, uncomment below line
-  // const { settings } = useSettings()
+ const { settings } = useSettings({mode: "light",skin: "bordered"})
   // ** To use mode (light/dark/semi-dark), skin(default/bordered), direction(ltr/rtl), etc. for conditional styles, uncomment below line
-  // const { mode, skin } = settings
+const { mode, skin } = settings
   // ** To use core palette, uncomment the below line
-  // const palette = corePalette(mode as PaletteMode, skin)
+   const palette = corePalette( mode, skin)
+
   return {
-    /*
+
     palette:{
       primary: {
-        light: '#8479F2',
-        main: '#7367F0',
-        dark: '#655BD3',
-        contrastText: '#FFF'
+        light: '#2a0909',
+        main: '#202020',
+        dark: '#202020',
+        contrastText: '#FFF33'
+      },
+      secondary: {
+        light: '#2a0909',
+        main: '#4c42df',
+        dark: '#585764',
+        contrastText: '#FFF33'
       }
+
     },
     breakpoints: {
       values: {
@@ -107,7 +115,7 @@ const UserThemeOptions = () => {
       }
     },
     shape: {
-      borderRadius: 8
+      borderRadius: 4
     },
     typography: {
       fontFamily:
@@ -167,9 +175,9 @@ const UserThemeOptions = () => {
       '0px 11px 27px 7px rgba(12, 16, 27, 0.15), 0px 24px 27px 3px rgba(12, 16, 27, 0.1), 0px 9px 24px 7px rgba(12, 16, 27, 0.08)'
     ],
     zIndex: {
-      appBar: 1200,
+      appBar: 1400,
       drawer: 1100
-    } */
+    } 
   }
 }
 

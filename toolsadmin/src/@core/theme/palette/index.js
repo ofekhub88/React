@@ -1,9 +1,9 @@
 const DefaultPalette = (mode, skin) => {
   // ** Vars
   const whiteColor = '#FFF'
-  const lightColor = '51, 48, 60'
-  const darkColor = '228, 230, 244'
-  const darkPaperBgColor = '#2F3349'
+  const lightColor = '0, 0, 0'
+  const darkColor = '255, 255, 133'
+  const darkPaperBgColor = '#373738'
   const mainColor = mode === 'light' ? lightColor : darkColor
 
   const defaultBgColor = () => {
@@ -13,7 +13,7 @@ const DefaultPalette = (mode, skin) => {
       return darkPaperBgColor
     } else if (mode === 'light') {
       return '#F8F7FA'
-    } else return '#25293C'
+    } else return '#373738'
   }
 
   return {
@@ -36,7 +36,7 @@ const DefaultPalette = (mode, skin) => {
     primary: {
       light: '#8479F2',
       main: '#7367F0',
-      dark: '#655BD3',
+      dark: '#53525B',
       contrastText: whiteColor
     },
     secondary: {

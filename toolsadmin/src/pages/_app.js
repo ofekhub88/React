@@ -32,7 +32,7 @@ import GuestGuard from 'src/@core/components/auth/GuestGuard'
 import WindowWrapper from 'src/@core/components/window-wrapper'
 
 // ** Spinner Import
-import Spinner from 'src/@core/components/spinner'
+import Spinner from 'src/customized/components/spinner'
 
 // ** Contexts
 import { AuthProvider } from 'src/context/AuthContext'
@@ -88,7 +88,7 @@ const App = props => {
 
   // Variables
   const contentHeightFixed = Component.contentHeightFixed ?? false
-
+  
   const getLayout =
     Component.getLayout ?? (page => <UserLayout contentHeightFixed={contentHeightFixed}>{page}</UserLayout>)
   const setConfig = Component.setConfig ?? undefined
@@ -100,13 +100,13 @@ const App = props => {
     
       <CacheProvider value={emotionCache}>
         <Head>
-          <title>{`${themeConfig.templateName} - Material Design React Admin Template`}</title>
+          <title>{`${themeConfig.templateName} - CHI - portal`}</title>
           <meta
             name='description'
-            content={`${themeConfig.templateName} – Material Design React Admin Dashboard Template – is the most developer friendly & highly customizable Admin Dashboard Template based on MUI v5.`}
+            content={`${themeConfig.templateName} –   CHI - portal Admin Dashboard`}
           />
-          <meta name='keywords' content='Material Design, MUI, Admin Template, React Admin Template' />
-          <meta name='viewport' content='initial-scale=1, width=device-width' />
+          <meta name='keywords' content='CHI - portal Admin Dashboard' />
+          <meta name='viewport' content='CHI - portal Admin Dashboard' />
         </Head>
 
         <AuthProvider>

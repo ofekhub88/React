@@ -3,10 +3,13 @@ import useMediaQuery from '@mui/material/useMediaQuery'
 // ** Layout Imports
 // !Do not remove this Layout import
 import Layout from 'src/@core/layouts/Layout'
+import Box from '@mui/material/Box'
+import Typography from '@mui/material/Typography'
+import Logo from "public/images/meir.png"
 
 // ** Navigation Imports
-import VerticalNavItems  from 'src/navigation/vertical'
-import HorizontalNavItems from 'src/navigation/horizontal'
+//import VerticalNavItems  from 'src/navigation/vertical'
+//import HorizontalNavItems from 'src/navigation/horizontal'
 
 // ** Component Import
 // Uncomment the below line (according to the layout type) when using server-side menu
@@ -19,6 +22,19 @@ import HorizontalAppBarContent from './components/horizontal/AppBarContent'
 
 // ** Hook Import
 import { useSettings } from 'src/@core/hooks/useSettings'
+//<img src={Logo.src} className="App-logo" alt='logo' width='30' height='30' />
+
+const AppBrand = () => {
+  return (
+    <Box sx={{ display: 'flex', alignItems: 'left' }}>
+      
+      <Typography variant='h6' sx={{ ml: 2 }}>
+        CHI Infra
+      </Typography>
+    </Box>
+  )
+}
+
 
 const UserLayout = ({ children, contentHeightFixed }) => {
   // ** Hooks
@@ -52,7 +68,8 @@ const UserLayout = ({ children, contentHeightFixed }) => {
           //navItems: VerticalNavItems()
 
           // Uncomment the below line when using server-side menu in vertical layout and comment the above line
-           navItems: verticalMenuItems
+           navItems: verticalMenuItems,
+           branding: () => <AppBrand />
         },
         appBar: {
           content: props => (

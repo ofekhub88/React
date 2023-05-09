@@ -1,5 +1,5 @@
 // ** MUI Imports
-import { csrftoken , config } from "../../../Config"
+import { csrftoken , config } from "src/configs/Config"
 
 import DialogTitle from '@mui/material/DialogTitle'
 
@@ -129,7 +129,7 @@ const Navigator = () => {
 }
   return ( 
       <div>
-      <Card>
+      <Card sx={{ margin: 10 ,maxWidth: 500 }}>
       <CardHeader title='navigator view' />
     <TreeView
       defaultExpanded={[0]}

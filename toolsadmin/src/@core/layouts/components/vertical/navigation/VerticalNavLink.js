@@ -10,7 +10,7 @@ import Box from '@mui/material/Box'
 import ListItemIcon from '@mui/material/ListItemIcon'
 import { styled, useTheme } from '@mui/material/styles'
 import ListItemButton from '@mui/material/ListItemButton'
-
+import Tooltip from '@mui/material/Tooltip';
 // ** Configs Import
 import themeConfig from 'src/configs/themeConfig'
 
@@ -24,6 +24,10 @@ import { hexToRGBA } from 'src/@core/utils/hex-to-rgba'
 import { handleURLQueries } from 'src/@core/layouts/utils'
 
 // ** Styled Components
+
+  
+
+
 const MenuNavLink = styled(ListItemButton)(({ theme }) => ({
   width: '100%',
   marginLeft: theme.spacing(3.5),
@@ -114,6 +118,7 @@ const VerticalNavLink = ({
         disabled={item.disabled || false}
         sx={{ mt: 1, px: '0 !important' }}
       >
+        <Tooltip title={item.tooltip}>
         <MenuNavLink
           component={Link}
           {...(item.disabled && { tabIndex: -1 })}
@@ -136,6 +141,7 @@ const VerticalNavLink = ({
             px: navCollapsed && !navHover ? (collapsedNavWidth - navigationBorderWidth - 22 - 28) / 8 : 4
           }}
         >
+           
           <ListItemIcon
             sx={{
               transition: 'margin .25s ease-in-out',
@@ -150,7 +156,6 @@ const VerticalNavLink = ({
           >
             <UserIcon icon={icon} />
           </ListItemIcon>
-
           <MenuItemTextMetaWrapper
             sx={{
               ...(isSubToSub ? { ml: 2 } : {}),
@@ -177,6 +182,7 @@ const VerticalNavLink = ({
             ) : null}
           </MenuItemTextMetaWrapper>
         </MenuNavLink>
+        </Tooltip>
       </ListItem>
     </CanViewNavLink>
   )

@@ -1,12 +1,14 @@
 // ** React Imports
+import * as React from 'react';
 import { forwardRef, useState ,useEffect} from 'react'
-import { csrftoken , config } from "../../../Config"
+import { csrftoken , config } from "src/configs/Config"
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 // ** MUI Imports
+
 import Card from '@mui/material/Card'
 import Grid from '@mui/material/Grid'
 import Button from '@mui/material/Button'
@@ -33,20 +35,19 @@ import Autocomplete from '@mui/material/Autocomplete'
 import Checkbox from '@mui/material/Checkbox'
 import FormGroup from '@mui/material/FormGroup'
 import FormControlLabel from '@mui/material/FormControlLabel'
-import DialogContent from '@mui/material/DialogContent'
+
 
 
 
 
 const NavEdit = ({navState,handleClose,UpdateCounter}) => {
   // ** States
-  const [date, setDate] = useState(null)
   const [icons,setIcons] =  useState(listIcons(''))
   const [node,setNode] =  useState({})
   const [origenNode,setOrigenNode] =  useState({})
-
+  const [dialog, setDialog] = useState({open: false,title: "",text: "",parent: "Y"})
   const url = config.API_SERVER+"/nav_edit"
-  const [open, setOpen] = useState(false)
+ 
   useEffect(() => {
       navState.nodeId &&
       fetch(url+"?nodeid="+navState.nodeId,config.requestOptions).
@@ -56,19 +57,7 @@ const NavEdit = ({navState,handleClose,UpdateCounter}) => {
       setOrigenNode(data)
     }).catch((err) => console.log(err));
   }, [])
-  const parnet_list = {0: "Root"}
-  const parent_ids = (tree) => {
-       let a= tree.map((item) => {
-           if (item.path === undefined && String(item.id) !== navState.nodeId ){
-             parnet_list[item.id] = item.title
-           }
-           if (item.children ) {
-              parent_ids(item.children)
-           } 
-    })
-  }
-parent_ids(navState.menuItems)
-
+  
   const handleSubmit = (() => {
     if (navState.nodeId) {
          let putRequestOptions = {...config.requestOptions}
@@ -77,7 +66,17 @@ parent_ids(navState.menuItems)
          fetch(url,putRequestOptions).
          then(response =>  response.json()).
          then((data) => {
-       }).catch((err) => console.log(err));
+          setDialog({...dialog,open:true,
+            parent: "Y",
+            title: "Update node",
+            text: " Node id "+navState.nodeId+"updated scussefuly"});
+       }).catch((err) => {
+               setDialog({...dialog,open:true,
+                                    parent: "Y",
+                                     title: "Update node",
+                                     text: err});
+        console.log(err);
+       });
      } else {
       let putRequestOptions = {...config.requestOptions}
       putRequestOptions["method"] = "POST"
@@ -85,17 +84,36 @@ parent_ids(navState.menuItems)
       fetch(url,putRequestOptions).
       then(response =>  response.json()).
       then((data) => {
-      console.log(data)
-    }).catch((err) => console.log(err));
+        setDialog({...dialog,open:true,
+          parent: "Y",
+          title: "New node",
+        text: "New Node id added scussefuly"});
+         }).catch((err) => {
+         setDialog({...dialog,open:true, parent: "N",
+           title: "New node",
+         text: err})
+         console.log(err)
+         }
+         );
      }
-     UpdateCounter.u(UpdateCounter.c+1)
-    return(handleClose())
 })
 
 
 
  // id, order_nav, parent_id, icon, "path", title, "action", subject, disabled, , "openInNewTab", "badgeColor", , 
-
+ const parent_ids = (tree) => {
+  let a= tree.map((item) => {
+      if (item.path === undefined && String(item.id) !== navState.nodeId ){
+        parnet_list[item.id] = item.title
+      }
+      if (item.children ) {
+         parent_ids(item.children)
+      } 
+})
+}
+  const parnet_list = {0: "Root"}
+  parent_ids(navState.menuItems)
+  
   const textFileds  =  ["title","path", "subject",
                         "tooltip","badgeContent","action"]
   const rquiredList = ["title"]
@@ -129,15 +147,30 @@ parent_ids(navState.menuItems)
     setNode(new_node)
   }
   const handleDelete = () =>{
-    e.preventDefault();
+   
     let putRequestOptions = {...config.requestOptions}
          putRequestOptions["method"] = "DELETE"
          fetch(url+"?nodeid="+navState.nodeId,putRequestOptions).
          then(response =>  response.json()).
          then((data) => {
-       }).catch((err) => console.log(err));
+          setDialog({...dialog,parent: "Y",
+                 open:true,title: "Delete",
+                 text: "Node id "+ navState.nodeId+ " deleted scussefuly"})
+       }).catch((err) => {
+        setDialog({...dialog,parent: "Y",
+                   open:true,title: "Delete",
+                 text: err});
+        console.log(err)});
+        UpdateCounter.u(UpdateCounter.c+1)
   }
-  return (
+  const handleLocalClose = () => {
+    setDialog({...dialog,open: false})
+    if (dialog.parent="Y") {
+    UpdateCounter.u(UpdateCounter.c+1)
+    return(handleClose())}
+  }
+
+  return (   <div>
     <DialogContent >
     <Card>
       
@@ -148,7 +181,7 @@ parent_ids(navState.menuItems)
           <Grid container spacing={5}> 
             <Grid item xs={12}>
               <Typography variant='body2' sx={{ fontWeight: 600 }}>
-                item info
+                Ndoe info
               </Typography>
             </Grid>
             { textFileds.map((item,i) => 
@@ -161,24 +194,23 @@ parent_ids(navState.menuItems)
                 <InputLabel>{item.name }</InputLabel>
                  <Select 
                      labelId="select-label"
-                     id={i}
-                     defaultValue={node[item.name]}
-                     value={!node[item.name]?"":node[item.name] }
+                     key={i}
+                     value={!node[item.name] && node[item.name] !== 0  ?"":node[item.name] }
                      label={item.name}
                      onChange= {e =>  handleListChange(e,e.target.value,item.name)}
                    >
                    { Array.isArray(item.options)? 
-                   item.options.map(key => <MenuItem key={key} value={key}>{key}</MenuItem>)
-                   :
-                    Object.keys(item.options).map(key => <MenuItem key={key} value={key}>{item.options[key]}</MenuItem>)
+                     item.options.map(key => <MenuItem key={key} value={key}>{key}</MenuItem>)
+                     :
+                      Object.keys(item.options).map(key => <MenuItem key={key} value={key}>{item.options[key]}</MenuItem>)
                      
                      }
                    </Select>
                    </FormControl>
                </Grid>
               )}
-            <Grid item xs={6} sm={4}>
-            <FormGroup row sx={{ mt: 4 }}>
+            <Grid item xs={6} sm={20}>
+            <FormGroup row sx={{ mt: 2 }}>
               {TrueFalse.map((item,i) =>
               <FormControlLabel  checked={node[item] === undefined? false: node[item]} onChange={e => handleCheckChange(e,item) } label={item} control={<Checkbox />} labelPlacement='end' sx={{ mr: 4 }}  key={i} />
               )}
@@ -207,7 +239,7 @@ parent_ids(navState.menuItems)
           </Grid>
         </CardContent>
         <CardActions>
-          <Button disabled={ origenNode === node || [!node.order_nav,!node.title,!node.parent_id].includes(true) } size='large' type='submit' sx={{ mr: 2 }} variant='contained' onClick={() => handleSubmit()}>
+          <Button disabled={ origenNode === node || ([!node.order_nav,!node.title,!node.parent_id].includes(true) && node.parent_id !== 0 )} size='large' type='submit' sx={{ mr: 2 }} variant='contained' onClick={() => handleSubmit()}>
             Submit
           </Button>
           <Button disabled={!node.id || navState.children === "Y" } size='large' type='submit' sx={{ mr: 2 }} variant='contained' onClick={() => handleDelete()}>
@@ -220,25 +252,25 @@ parent_ids(navState.menuItems)
       </form>
     </Card>
     </DialogContent>
+ 
     <Dialog
-        open={open}
-        TransitionComponent={Transition}
-        keepMounted
-        onClose={handleClose}
-        aria-describedby="alert-dialog-slide-description"
-      >
-        <DialogTitle>{"Use Google's location service?"}</DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-slide-description">
-            Let Google help apps determine location. This means sending anonymous
-            location data to Google, even when no apps are running.
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose}>Disagree</Button>
-          <Button onClick={handleClose}>Agree</Button>
-        </DialogActions>
-      </Dialog>
+          open={dialog.open}
+         keepMounted
+       onClose={() => handleLocalClose()}
+       aria-describedby="alert-dialog-slide-description"
+       >
+       <DialogTitle>{dialog.title}</DialogTitle>
+       <DialogContent>
+         <DialogContentText id="alert-dialog-slide-description">
+                {dialog.text}
+         </DialogContentText>
+       </DialogContent>
+       <DialogActions>
+         <Button onClick={()=>  handleLocalClose()}> Close </Button>
+       </DialogActions>
+</Dialog>
+    
+  </div>
   )
 }
 

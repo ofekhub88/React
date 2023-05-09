@@ -84,14 +84,14 @@ const FormControlLabel = styled(MuiFormControlLabel)(({ theme }) => ({
   }
 }))
 
-const schema = yup.object().shape({
-  email: yup.string().email().required(),
+const schema = yup.object().shape({ 
+  username: yup.string().required(), 
   password: yup.string().min(5).required()
 })
 
 const defaultValues = {
-  password: 'admin',
-  email: 'admin@vuexy.com'
+  password: 'meirof',
+  password: '0230OKMko#'
 }
 
 const LoginPage = () => {
@@ -120,11 +120,11 @@ const LoginPage = () => {
   })
 
   const onSubmit = data => {
-    const { email, password } = data
-    auth.login({ email, password, rememberMe }, () => {
-      setError('email', {
+    const { username, password } = data
+    auth.login({ username, password, rememberMe }, () => {
+      setError('username', {
         type: 'manual',
-        message: 'Email or Password is invalid'
+        message: 'username or Password is invalid'
       })
     })
   }
@@ -196,33 +196,26 @@ const LoginPage = () => {
                 Please sign-in to your account and start the adventure
               </Typography>
             </Box>
-            <Alert icon={false} sx={{ py: 3, mb: 6, ...bgColors.primaryLight, '& .MuiAlert-message': { p: 0 } }}>
-              <Typography variant='body2' sx={{ mb: 2, color: 'primary.main' }}>
-                Admin: <strong>admin@vuexy.com</strong> / Pass: <strong>admin</strong>
-              </Typography>
-              <Typography variant='body2' sx={{ color: 'primary.main' }}>
-                Client: <strong>client@vuexy.com</strong> / Pass: <strong>client</strong>
-              </Typography>
-            </Alert>
+
             <form noValidate autoComplete='off' onSubmit={handleSubmit(onSubmit)}>
               <FormControl fullWidth sx={{ mb: 4 }}>
                 <Controller
-                  name='email'
+                  name='username'
                   control={control}
                   rules={{ required: true }}
                   render={({ field: { value, onChange, onBlur } }) => (
                     <TextField
                       autoFocus
-                      label='Email'
+                      label='username'
                       value={value}
                       onBlur={onBlur}
                       onChange={onChange}
-                      error={Boolean(errors.email)}
-                      placeholder='admin@vuexy.com'
+                      error={Boolean(errors.username)}
+                      placeholder='username'
                     />
                   )}
                 />
-                {errors.email && <FormHelperText sx={{ color: 'error.main' }}>{errors.email.message}</FormHelperText>}
+                {errors.username && <FormHelperText sx={{ color: 'error.main' }}>{errors.username.message}</FormHelperText>}
               </FormControl>
               <FormControl fullWidth sx={{ mb: 1.5 }}>
                 <InputLabel htmlFor='auth-login-v2-password' error={Boolean(errors.password)}>
@@ -274,48 +267,12 @@ const LoginPage = () => {
                   label='Remember Me'
                   control={<Checkbox checked={rememberMe} onChange={e => setRememberMe(e.target.checked)} />}
                 />
-                <LinkStyled href='/forgot-password'>Forgot Password?</LinkStyled>
+                
               </Box>
               <Button fullWidth size='large' type='submit' variant='contained' sx={{ mb: 4 }}>
                 Login
               </Button>
-              <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}>
-                <Typography sx={{ color: 'text.secondary', mr: 2 }}>New on our platform?</Typography>
-                <Typography variant='body2'>
-                  <LinkStyled href='/register' sx={{ fontSize: '1rem' }}>
-                    Create an account
-                  </LinkStyled>
-                </Typography>
-              </Box>
-              <Divider
-                sx={{
-                  fontSize: '0.875rem',
-                  color: 'text.disabled',
-                  '& .MuiDivider-wrapper': { px: 6 },
-                  my: theme => `${theme.spacing(6)} !important`
-                }}
-              >
-                or
-              </Divider>
-              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <IconButton href='/' component={Link} sx={{ color: '#497ce2' }} onClick={e => e.preventDefault()}>
-                  <Icon icon='mdi:facebook' />
-                </IconButton>
-                <IconButton href='/' component={Link} sx={{ color: '#1da1f2' }} onClick={e => e.preventDefault()}>
-                  <Icon icon='mdi:twitter' />
-                </IconButton>
-                <IconButton
-                  href='/'
-                  component={Link}
-                  onClick={e => e.preventDefault()}
-                  sx={{ color: theme => (theme.palette.mode === 'light' ? '#272727' : 'grey.300') }}
-                >
-                  <Icon icon='mdi:github' />
-                </IconButton>
-                <IconButton href='/' component={Link} sx={{ color: '#db4437' }} onClick={e => e.preventDefault()}>
-                  <Icon icon='mdi:google' />
-                </IconButton>
-              </Box>
+
             </form>
           </Box>
         </Box>
