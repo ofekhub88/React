@@ -29,3 +29,11 @@ yarn-error.log*./toolsadmin/node_modules/@iconify/json/json/fluent-emoji.json
 ./toolsadmin/.next/cache_old/webpack/client-development/24.pack
 ./employee-polls/node_modules/.cache/default-development/6.pack
 ./employee-polls/node_modules/.cache/default-development/38.pack
+./toolsadmin/node_modules/@iconify/json/json/fluent-emoji.json
+./toolsadmin/node_modules/@next/swc-linux-x64-musl/next-swc.linux-x64-musl.node
+./toolsadmin/node_modules/@next/swc-linux-x64-gnu/next-swc.linux-x64-gnu.node
+./toolsadmin/.next/cache/webpack/client-development/15.pack
+./toolsadmin/.next/cache/webpack/client-development/9.pack
+./toolsadmin/.next/cache/webpack/client-development/5.pack
+./toolsadmin/.next/cache/webpack/client-development/12.pack
+./nextjs-admin-template/.next/cache/webpack/client-development/1.pack
