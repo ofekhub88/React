@@ -44,6 +44,14 @@ import BlankLayout from 'src/@core/layouts/BlankLayout'
 // ** Demo Imports
 import FooterIllustrationsV2 from 'src/views/pages/auth/FooterIllustrationsV2'
 
+
+// Import images
+import heart from "public/images/heart_color.gif"
+import stethoscope from "public/images/stethoscope.gif"
+import LogoLight from "public/images/ChiLogoLight.gif"
+import LogoDark from "public/images/ChiLogoDark.gif"
+
+
 // ** Styled Components
 const LoginIllustration = styled('img')(({ theme }) => ({
   zIndex: 2,
@@ -130,6 +138,17 @@ const LoginPage = () => {
   }
   const imageSource = skin === 'bordered' ? 'auth-v2-login-illustration-bordered' : 'auth-v2-login-illustration'
 
+  const gradient = 'linear-gradient(45deg, white,#FF69B4, #800080, #FFFF00, #FF1493)';
+  const gradientTextStyle = {
+    background: gradient,
+    backgroundClip: 'text',
+    WebkitBackgroundClip: 'text',
+    WebkitTextFillColor: 'transparent',
+    position: 'absolute',
+    top: '10%',
+  };
+
+
   return (
     <Box className='content-right' sx={{ backgroundColor: 'background.paper' }}>
       {!hidden ? (
@@ -145,8 +164,17 @@ const LoginPage = () => {
             margin: theme => theme.spacing(8, 0, 8, 8)
           }}
         >
-          <LoginIllustration alt='login-illustration' src={`/images/pages/${imageSource}-${theme.palette.mode}.png`} />
-          <FooterIllustrationsV2 />
+
+
+ <Typography variant="h3" sx={gradientTextStyle}>    Wellcome to CHI Dashboards  </Typography>
+<img  className="image"src={settings.mode === "dark"? LogoLight.src: LogoDark.src} className="App-logo" alt='logo'
+ width='30%' height='8%' style={{position: 'absolute', top: '90%', left: '80%', transform: 'translateX(-50%)', }} />
+<img className="image" src={heart.src} alt="heart" width="15%" style={{ position: 'absolute', top: '35%', left: '50%', }} />
+<img className="image" src={stethoscope.src}  height="50%" width="60%"   alt="stethoscope" style={{  position: 'absolute',top: '25%', left: '10%' }} />
+
+      
+
+        
         </Box>
       ) : null}
       <RightWrapper>
@@ -263,11 +291,8 @@ const LoginPage = () => {
                   justifyContent: 'space-between'
                 }}
               >
-                <FormControlLabel
-                  label='Remember Me'
-                  control={<Checkbox checked={rememberMe} onChange={e => setRememberMe(e.target.checked)} />}
-                />
                 
+              
               </Box>
               <Button fullWidth size='large' type='submit' variant='contained' sx={{ mb: 4 }}>
                 Login
@@ -284,3 +309,15 @@ LoginPage.getLayout = page => <BlankLayout>{page}</BlankLayout>
 LoginPage.guestGuard = true
 
 export default LoginPage
+/*
+
+                <FormControlLabel
+                  label='Remember Me'
+                  control={<Checkbox checked={rememberMe} onChange={e => setRememberMe(e.target.checked)} />}
+                />
+
+                <LoginIllustration alt='login-illustration' src={`/images/pages/${imageSource}-${theme.palette.mode}.png`} />
+
+                  <LoginIllustration alt='login-illustration' src={heart.src} />
+          <FooterIllustrationsV2 />
+                */

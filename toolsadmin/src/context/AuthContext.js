@@ -70,9 +70,9 @@ const AuthProvider = ({ children }) => {
     fetch(authConfig.loginEndpoint,RequestOptions).
     then(response => response.json()).
     then(data => {
-      params.rememberMe
-        ? window.localStorage.setItem(authConfig.storageTokenKeyName, data.access)
-        : null
+     // params.rememberMe
+         window.localStorage.setItem(authConfig.storageTokenKeyName, data.access)
+       // : null
       const returnUrl = router.query.returnUrl
       let userData =  jwt_decode(data.access).userData
 
