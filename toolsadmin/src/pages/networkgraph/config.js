@@ -39,7 +39,7 @@ export  const net_config = {
 		"mouseCursor": "crosshair",
 		"opacity": 0.9,
 		"renderLabel": true,
-		"size": 200,
+		"size": 50,
 		"strokeColor": "none",
 		"strokeWidth": 1.5,
 		"svg": "",

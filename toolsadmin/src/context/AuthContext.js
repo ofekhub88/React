@@ -79,7 +79,9 @@ const AuthProvider = ({ children }) => {
           //userData.email = "admin@vuexy.com"
 
       setUser(userData)
-      params.rememberMe ? window.localStorage.setItem('userData',  JSON.stringify(userData)) : null
+     // params.rememberMe ? 
+      window.localStorage.setItem('userData',  JSON.stringify(userData)) 
+      //: null
       const redirectURL = returnUrl && returnUrl !== '/' ? returnUrl : '/'
       router.replace(redirectURL)
   }).catch(err => {
